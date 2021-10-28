@@ -1,0 +1,79 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8">
+      <h2>Transaksi Hari Ini <%= date %></h2>
+      <a href="/transactions/add-transaction" class="btn btn-success mt-3"
+        >Tambah Transaksi Baru</a
+      >
+      <a href="/history_transactions" class="btn btn-success mt-3">Ke Halaman Histori Transaksi</a>
+      <form class="mt-3">
+        <div class="mb-3">
+          <label for="profit" class="form-label"
+            >Total Barang Yang Terjual Untuk Hari ini :</label >
+          <input type="text" class="form-control" id="profit" name="profit"
+            <% if (profitTransactions.length === 0) { %>
+              value= "Rp. 0"
+            <% } else { %>
+              <% profitTransactions.forEach(profitTransaction => { %>
+              value = "Rp. <%= profitTransaction.profit %>"
+            <% }) %>
+            <% } %> 
+          disabled /> 
+        </div>
+      </form>
+      <form action="/transactions?_method=DELETE" method="POST">
+        <input
+          type="hidden"
+          name="tanggal"
+          <% transactions.forEach(transaction => { %>
+            value="<%= transaction.tanggal %>"
+          <% }) %>
+        />
+        <button
+          type="submit"
+          class="btn btn-danger badge mt-2"
+          onclick="return confirm('Yakin?');"
+        >
+          <i class="bi bi-trash-fill"></i>
+          Hapus Semua Transaksi Hari Ini
+        </button>
+      </form>
+      <!-- cek variabel msg jika tidak ada isinya -->
+      <% if (msg.length !== 0) { %>
+      <div class="alert alert-success d-block mt-3" role="alert">
+        <%= msg %>
+      </div>
+      <% } %>
+      <table class="table text-white mt-3 text-center">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Nama Barang</th>
+            <th scope="col">Harga Satuan</th>
+            <th scope="col">Jumlah Dibeli</th>
+            <th scope="col">Total Bayar</th>
+            <th scope="col">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% transactions.forEach((transaction, i) => { %>
+          <tr>
+            <th scope="row"><%= i+1 %></th>
+            <td><%- transaction.nama_barang %></td>
+            <td>Rp. <%- transaction.harga_satuan %></td>
+            <td><%- transaction.jumlah_barang %></td>
+            <td>Rp. <%- transaction.total_bayar %></td>
+            <td>
+              <a
+                href="/transactions/edit/<%= transaction.nama_barang %>"
+                class="btn btn-success badge"
+                ><i class="bi bi-pencil-square"></i> ubah</a
+              >
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

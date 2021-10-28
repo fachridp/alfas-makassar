@@ -1,0 +1,59 @@
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Form Ubah Data Transaction</h2>
+      <form method="POST" action="/transactions?_method=PUT">
+        <!-- Ambil _id -->
+        <input type="hidden" name="_id" value="<%= transactions._id %>" />
+        <div class="mb-3">
+          <label for="nama_barang" class="form-label">Nama Barang</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nama_barang"
+            name="nama_barang"
+            value="<%= transactions.nama_barang %>"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="harga_satuan" class="form-label">Harga Satuan</label>
+          <input
+            type="text"
+            class="form-control"
+            id="harga_satuan"
+            name="harga_satuan"
+            value="<%= transactions.harga_satuan %>"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="jumlah_barang" class="form-label">Jumlah Barang</label>
+          <input
+            type="text"
+            class="form-control"
+            id="jumlah_barang"
+            name="jumlah_barang"
+            value="<%= transactions.jumlah_barang %>"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="total_bayar" class="form-label">Total Bayar</label>
+          <input
+            type="text"
+            class="form-control"
+            id="total_bayar"
+            name="total_bayar"
+            value="<%= transactions.total_bayar %>"
+            required
+          />
+        </div>
+        <a href="/transactions" class="btn btn-danger">Kembali</a>
+        <button type="submit" class="btn btn-success">
+          Ubah Data Transaksi
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="container mt-4">
+    <div class="row">
+      <div class="col-md-8">
+        <h2>Histori Transaksi</h2>
+        <a href="/transactions" class="btn btn-success mt-3">Ke Halaman Transaksi</a>
+        <table class="table text-white mt-3 text-center">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Tanggal</th>
+              <th scope="col">Profit</th>
+              <th scope="col">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% historyTransactions.forEach((historyTransaction, i) => { %>
+              <tr>
+                <th scope="row"><%= i+1 %></th>
+                <th scope="row"><%= historyTransaction._id %> </th>
+                  <th scope="row">Rp. <%= historyTransaction.profit %> </th>
+                <td>
+                  <a
+                    href="/history_detail_transactions/<%= historyTransaction._id %>"
+                    class="btn btn-success badge"
+                    ><i class="bi bi-pencil-square"></i> detail</a
+                  >
+                  <form action="/history_transactions?_method=DELETE" method="POST">
+                    <input
+                      type="hidden"
+                      name="_id"
+                      value="<%= historyTransaction._id %>"
+                    />
+                    <button
+                      type="submit"
+                      class="btn btn-danger badge mt-2"
+                      onclick="return confirm('Yakin?');"
+                    >
+                      <i class="bi bi-trash-fill"></i>
+                      hapus
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  

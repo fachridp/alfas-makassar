@@ -1,0 +1,55 @@
+<div class="container mt-4 text-dark">
+    <div class="row">
+      <div class="col-md-8">
+          <h4>Histori Detail Transaksi Pada </h4>
+        <a href="/history_transactions" class="btn btn-success mt-3">Ke Halaman Histori Transaksi</a>
+        <a href="/transactions" class="btn btn-success mt-3">Ke Halaman Transaksi</a>
+        <table class="table mt-3 text-center">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Nama Barang</th>
+              <th scope="col">Harga Satuan</th>
+              <th scope="col">Jumlah Barang</th>
+              <th scope="col">Total Bayar</th>
+              <th scope="col">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% historyTransactions.forEach((historyTransaction, i) => { %>
+            <tr>
+              <th scope="row"><%= i+1 %></th>
+              <td><%= historyTransaction.nama_barang %></td>
+              <td>Rp. <%= historyTransaction.harga_satuan %></td>
+                <td><%= historyTransaction.jumlah_barang %></td>
+                <td>Rp. <%= historyTransaction.total_bayar %></td>
+                <td>
+                  <a
+                    href="/history_detail_transactions/edit/<%= historyTransaction.nama_barang %>"
+                    class="btn btn-success badge"
+                    ><i class="bi bi-pencil-square"></i> ubah</a
+                  >
+                  <form action="/history_detail_transactions?_method=DELETE" method="POST">
+                    <input
+                      type="hidden"
+                      name="nama_barang"
+                      value="<%= historyTransaction.nama_barang %>"
+                    />
+                    <button
+                      type="submit"
+                      class="btn btn-danger badge mt-2"
+                      onclick="return confirm('Yakin?');"
+                    >
+                      <i class="bi bi-trash-fill"></i>
+                      hapus
+                    </button>
+                  </form>
+                </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
