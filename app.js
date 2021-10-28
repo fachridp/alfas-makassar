@@ -171,23 +171,6 @@ app.put("/transactions", async (req, res) => {
 
     res.redirect("/transactions"); // kembali ke route app.get('/contact')
   });
-
-   await History.updateOne(
-     { _id: req.body._id },
-     {
-      $set: {
-        nama_barang: req.body.nama_barang,
-        harga_satuan: req.body.harga_satuan,
-        jumlah_barang: req.body.jumlah_barang,
-        total_bayar: req.body.total_bayar,
-      },
-    }
-   ).then((result) => {
-    // kirimkan flash message sebelum diredirect. Nanti di session ada yang namanya variabel msg, yang isinya "Data contact baru berhasil ditambahkan"
-    req.flash("msg", "Data transaksi berhasil diubah");
-
-    res.redirect("/transactions"); // kembali ke route app.get('/contact')
-   });
 });
 
 // Halaman History transactions
