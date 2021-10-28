@@ -6,23 +6,6 @@ const flash = require("connect-flash");
 const methodOverride = require("method-override");
 const moment = require("moment");
 
-// Function untuk generate ObjectID secara random
-function objectId() {
-  const os = require("os");
-  const crypto = require("crypto");
-
-  const secondInHex = Math.floor(new Date() / 1000).toString(16);
-  const machineId = crypto
-    .createHash("md5")
-    .update(os.hostname())
-    .digest("hex")
-    .slice(0, 6);
-  const processId = process.pid.toString(16).slice(0, 4).padStart(4, "0");
-  const counter = process.hrtime()[1].toString(16).slice(0, 6).padStart(6, "0");
-
-  return secondInHex + machineId + processId + counter;
-}
-
 require("./utils/db");
 const Transaction = require("./model/transaction");
 const History = require("./model/history");
@@ -107,6 +90,23 @@ app.post("/transactions", async (req, res) => {
 
   // Variabel untuk mengambil semua isi dari collection Transaction
   let getTransactions;
+
+// Function untuk generate ObjectID secara random
+function objectId() {
+  const os = require("os");
+  const crypto = require("crypto");
+
+  const secondInHex = Math.floor(new Date() / 1000).toString(16);
+  const machineId = crypto
+    .createHash("md5")
+    .update(os.hostname())
+    .digest("hex")
+    .slice(0, 6);
+  const processId = process.pid.toString(16).slice(0, 4).padStart(4, "0");
+  const counter = process.hrtime()[1].toString(16).slice(0, 6).padStart(6, "0");
+
+  return secondInHex + machineId + processId + counter;
+}
 
   const transactions = await Transaction.find();
   transactions.forEach((transaction) => {
