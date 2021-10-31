@@ -13,34 +13,64 @@
             </tr>
           </thead>
           <tbody>
-            <% historyTransactions.forEach((historyTransaction, i) => { %>
-              <tr>
-                <th scope="row"><%= i+1 %></th>
-                <th scope="row"><%= historyTransaction._id %> </th>
-                  <th scope="row">Rp. <%= historyTransaction.profit %> </th>
-                <td>
-                  <a
-                    href="/history_detail_transactions/<%= historyTransaction._id %>"
-                    class="btn btn-success badge"
-                    ><i class="bi bi-pencil-square"></i> detail</a
-                  >
-                  <form action="/history_transactions?_method=DELETE" method="POST">
-                    <input
-                      type="hidden"
-                      name="_id"
-                      value="<%= historyTransaction._id %>"
-                    />
-                    <button
-                      type="submit"
-                      class="btn btn-danger badge mt-2"
-                      onclick="return confirm('Yakin?');"
+            <% profitHistories.forEach((profitHistory, i) => { %>
+              <% if (profitHistory._id === dateStr) { %>
+                    <tr>
+                        <th scope="row"><%= i+1 %></th>
+                        <th scope="row"><%= profitHistory._id %> </th>
+                          <th scope="row">Rp. <%= profitHistory.profit %> </th>
+                        <td>
+                          <a
+                            href="/history_detail_transactions/<%= profitHistory._id %>"
+                            class="btn btn-success badge"
+                            ><i class="bi bi-pencil-square"></i> detail</a
+                          >
+                          <form action="/history_transactions?_method=DELETE" method="POST">
+                            <input
+                              type="hidden"
+                              name="_id"
+                              value="<%= profitHistory._id %>"
+                            />
+                            <button
+                              type="submit"
+                              class="btn btn-danger badge mt-2"
+                              onclick="return confirm('Yakin?');"
+                            >
+                              <i class="bi bi-trash-fill"></i>
+                              hapus
+                            </button>
+                          </form>
+                        </td>
+                    </tr>
+              <% } else { %>
+                <tr>
+                  <th scope="row"><%= i+1 %></th>
+                  <th scope="row"><%= profitHistory._id %> </th>
+                    <th scope="row">Rp. <%= profitHistory.profit %> </th>
+                  <td>
+                    <a
+                      href="/history_detail_transactions/<%= profitHistory._id %>"
+                      class="btn btn-success badge"
+                      ><i class="bi bi-pencil-square"></i> detail</a
                     >
-                      <i class="bi bi-trash-fill"></i>
-                      hapus
-                    </button>
-                  </form>
-                </td>
+                    <form action="/history_transactions?_method=DELETE" method="POST">
+                      <input
+                        type="hidden"
+                        name="_id"
+                        value="<%= profitHistory._id %>"
+                      />
+                      <button
+                        type="submit"
+                        class="btn btn-danger badge mt-2"
+                        onclick="return confirm('Yakin?');"
+                      >
+                        <i class="bi bi-trash-fill"></i>
+                        hapus
+                      </button>
+                    </form>
+                  </td>
               </tr>
+              <% } %>
             <% }) %>
           </tbody>
         </table>

@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 
-// cmoment().subtract("10", "days").calendar();
-// mongoose.Types.ObjectId.isValid(Transaction.tanggal);
-
 // mongoose.connect("mongodb://127.0.0.1:27017/tokoAlfas", {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
@@ -30,6 +27,7 @@ const Transaction = mongoose.model("Transaction", {
     type: Number,
     minimum: 0,
     exclusiveMaximum: 10000000,
+    required: true,
   },
 });
 
@@ -42,4 +40,3 @@ const Transaction = mongoose.model("Transaction", {
 // transaction.save().then((result) => console.log(result));
 
 module.exports = Transaction;
-// module.exports = fullDate;

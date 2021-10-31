@@ -10,25 +10,25 @@ const mongoose = require("mongoose");
 const History = mongoose.model("History", {
   tanggal: {
     type: String,
-    // required: true,
+    required: true,
   },
   nama_barang: {
     type: String,
-    // required: true,
+    required: true,
   },
   harga_satuan: {
     type: String,
-    // required: true,
+    required: true,
   },
   jumlah_barang: {
     type: String,
-    // required: true,
+    required: true,
   },
   total_bayar: {
     type: Number,
     minimum: 0,
     exclusiveMaximum: 10000000,
-    // required: true,
+    required: true,
   },
 });
 

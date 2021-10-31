@@ -62,7 +62,7 @@ app.get("/", (req, res) => {
 app.get("/transactions", async (req, res) => {
   const transactions = await Transaction.find();
 
-  // Proses Menghitung Total Herga Barang Yang Terjual Per Hari
+  // Proses Menghitung Total Herga Barang Yang Terjual Per Hari pada Collection Transaction
   const profitTransactions = await Transaction.aggregate([
     { $match: {} },
     {
@@ -75,8 +75,12 @@ app.get("/transactions", async (req, res) => {
     },
   ]);
 
-  // Generate date hari ini
-  let date = moment().format("LL");
+  // Generate tanggal, bulan dan tahun saat ini
+  let d = new Date();
+  let date = d.getDate();
+  let month = d.getMonth() + 1;
+  let year = d.getFullYear();
+  let dateStr = `${date}/${month}/${year}`;
 
   res.render("transactions", {
     title: "TRANSACTION | ALFAS Makassar",
@@ -84,6 +88,7 @@ app.get("/transactions", async (req, res) => {
     transactions,
     profitTransactions,
     date,
+    dateStr,
     msg: req.flash("msg"),
   });
 });
@@ -100,45 +105,31 @@ app.get("/transactions/add-transaction", async (req, res) => {
 app.post("/transactions", async (req, res) => {
   await Transaction.insertMany(req.body, (error, result) => {
     // kirimkan flash message sebelum diredirect. Nanti di session ada yang namanya variabel msg, yang isinya "Data transaksi baru berhasil ditambahkan"
-    req.flash("msg", "Data Transaksi baru berhasil ditambahkan");
+    req.flash("msg", "Data Transaksi baru berhasil ditambahkan.");
 
     res.redirect("/transactions"); // kembali ke route app.get('/contact')
   });
 
-  // Variabel untuk mengambil semua isi dari collection Transaction
-  let getTransactions;
-
   const transactions = await Transaction.find();
-  transactions.forEach((transaction) => {
-    getTransactions = [
-      {
-        _id: objectId(),
-        tanggal: transaction.tanggal,
-        nama_barang: transaction.nama_barang,
-        harga_satuan: transaction.harga_satuan,
-        jumlah_barang: transaction.jumlah_barang,
-        total_bayar: transaction.total_bayar,
-      },
-    ];
-  });
 
-  History.insertMany(getTransactions);
-  console.log(getTransactions);
+  transactions.forEach((transaction) => {
+    History.insertMany(transaction);
+  });
 });
 
 // Proses Delete Semua Transaksi
 app.delete("/transactions", (req, res) => {
   Transaction.deleteMany({ tanggal: req.body.tanggal }).then((result) => {
     // kirimkan flash message sebelum diredirect. Nanti di session ada yang namanya variabel msg, yang isinya "Data contact baru berhasil ditambahkan"
-    req.flash("msg", "Data transaksi yang dipilih sudah terhapus");
+    req.flash("msg", "Semua data transaksi hari ini berhasil dihapus!");
     res.redirect("/transactions");
   });
 });
 
 // Halaman Form Ubah Data Transaksi
-app.get("/transactions/edit/:nama_barang", async (req, res) => {
+app.get("/transactions/edit/:_id", async (req, res) => {
   const transactions = await Transaction.findOne({
-    nama_barang: req.params.nama_barang,
+    _id: req.params._id,
   });
 
   res.render("edit-transaction", {
@@ -151,7 +142,9 @@ app.get("/transactions/edit/:nama_barang", async (req, res) => {
 // Proses Ubah Data Transaksi
 app.put("/transactions", async (req, res) => {
   await Transaction.updateOne(
-    { _id: req.body._id },
+    {
+      _id: req.body._id,
+    },
     {
       $set: {
         nama_barang: req.body.nama_barang,
@@ -163,14 +156,31 @@ app.put("/transactions", async (req, res) => {
   ).then((result) => {
     // kirimkan flash message sebelum diredirect. Nanti di session ada yang namanya variabel msg, yang isinya "Data contact baru berhasil ditambahkan"
     req.flash("msg", "Data transaksi berhasil diubah");
+    res.redirect("/transactions"); // kembali ke route app.get('/contact')
+  });
 
+  await History.updateOne(
+    {
+      _id: req.body._id,
+    },
+    {
+      $set: {
+        nama_barang: req.body.nama_barang,
+        harga_satuan: req.body.harga_satuan,
+        jumlah_barang: req.body.jumlah_barang,
+        total_bayar: req.body.total_bayar,
+      },
+    }
+  ).then((result) => {
+    // kirimkan flash message sebelum diredirect. Nanti di session ada yang namanya variabel msg, yang isinya "Data contact baru berhasil ditambahkan"
+    req.flash("msg", "Data transaksi berhasil diubah");
     res.redirect("/transactions"); // kembali ke route app.get('/contact')
   });
 });
 
 // Halaman History transactions
 app.get("/history_transactions", async (req, res) => {
-  const historyTransactions = await History.aggregate([
+  const profitHistories = await History.aggregate([
     { $match: {} },
     {
       $group: {
@@ -181,10 +191,23 @@ app.get("/history_transactions", async (req, res) => {
     { $sort: { _id: 1 } },
   ]);
 
+  // Generate jam saat ini
+  let today = new Date();
+  let time = today.getHours();
+
+  // Generate tanggal, bulan dan tahun saat ini
+  let d = new Date();
+  let date = d.getDate();
+  let month = d.getMonth() + 1;
+  let year = d.getFullYear();
+  let dateStr = `${year}-${month}-${date}`;
+
   res.render("history_transactions", {
     title: "HiSTORY TRANSACTION | ALFAS Makassar",
     layout: "layouts/main-layout",
-    historyTransactions,
+    profitHistories,
+    time,
+    dateStr,
   });
 });
 

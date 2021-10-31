@@ -24,11 +24,6 @@
                 <td><%= historyTransaction.jumlah_barang %></td>
                 <td>Rp. <%= historyTransaction.total_bayar %></td>
                 <td>
-                  <a
-                    href="/history_detail_transactions/edit/<%= historyTransaction.nama_barang %>"
-                    class="btn btn-success badge"
-                    ><i class="bi bi-pencil-square"></i> ubah</a
-                  >
                   <form action="/history_detail_transactions?_method=DELETE" method="POST">
                     <input
                       type="hidden"

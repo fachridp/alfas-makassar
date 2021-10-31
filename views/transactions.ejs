@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <div class="row">
     <div class="col-md-8">
-      <h2>Transaksi Hari Ini <%= date %></h2>
+      <h2>Transaksi Hari Ini <%= dateStr %></h2>
       <a href="/transactions/add-transaction" class="btn btn-success mt-3"
         >Tambah Transaksi Baru</a
       >
@@ -65,7 +65,7 @@
             <td>Rp. <%- transaction.total_bayar %></td>
             <td>
               <a
-                href="/transactions/edit/<%= transaction.nama_barang %>"
+                href="/transactions/edit/<%= transaction._id %>"
                 class="btn btn-success badge"
                 ><i class="bi bi-pencil-square"></i> ubah</a
               >
