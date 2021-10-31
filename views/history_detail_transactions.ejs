@@ -12,6 +12,7 @@
               <th scope="col">Harga Satuan</th>
               <th scope="col">Jumlah Barang</th>
               <th scope="col">Total Bayar</th>
+              <th scope="col">Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -22,6 +23,23 @@
               <td>Rp. <%= historyTransaction.harga_satuan %></td>
                 <td><%= historyTransaction.jumlah_barang %></td>
                 <td>Rp. <%= historyTransaction.total_bayar %></td>
+                <td>
+                  <form action="/history_detail_transactions?_method=DELETE" method="POST">
+                    <input
+                      type="hidden"
+                      name="nama_barang"
+                      value="<%= historyTransaction.nama_barang %>"
+                    />
+                    <button
+                      type="submit"
+                      class="btn btn-danger badge mt-2"
+                      onclick="return confirm('Yakin?');"
+                    >
+                      <i class="bi bi-trash-fill"></i>
+                      hapus
+                    </button>
+                  </form>
+                </td>
             </tr>
             <% }) %>
           </tbody>
