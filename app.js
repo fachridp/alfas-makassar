@@ -44,6 +44,32 @@ app.get("/", (req, res) => {
 app.get("/transactions", async (req, res) => {
   const transactions = await Transaction.find();
 
+  // ==================== Sengaja dimasukkan di sini, agar mencegah bug (data tidak masuk ke dalam Collection History) =================== //
+  let newHistory;
+
+  transactions.forEach(async (transaction) => {
+    newHistory = [
+      {
+        _id: transaction._id,
+        tanggal: transaction.tanggal,
+        nama_barang: transaction.nama_barang,
+        harga_satuan: transaction.harga_satuan,
+        jumlah_barang: transaction.jumlah_barang,
+        total_bayar: transaction.total_bayar,
+        __v: transaction.__v,
+      },
+    ];
+
+    try {
+      await History.insertMany(newHistory);
+    } catch (error) {
+      return;
+    }
+  });
+  // ==================== ** ==================== //
+
+  // console.log(newHistory.length);
+
   // Proses Menghitung Total Herga Barang Yang Terjual Per Hari pada Collection Transaction
   const profitTransactions = await Transaction.aggregate([
     { $match: {} },
@@ -90,14 +116,6 @@ app.post("/transactions", async (req, res) => {
     req.flash("msg", "Data Transaksi baru berhasil ditambahkan.");
 
     res.redirect("/transactions"); // kembali ke route app.get('/contact')
-  });
-
-  const transactions = await Transaction.find();
-
-  transactions.forEach(async (transaction) => {
-    await History.insertMany(transaction, (error, result) => {
-      req.flash("msg", "Data Transaksi baru berhasil ditambahkan.");
-    });
   });
 });
 
@@ -158,7 +176,6 @@ app.put("/transactions", async (req, res) => {
   ).then((result) => {
     // kirimkan flash message sebelum diredirect. Nanti di session ada yang namanya variabel msg, yang isinya "Data contact baru berhasil ditambahkan"
     req.flash("msg", "Data transaksi berhasil diubah");
-    res.redirect("/transactions"); // kembali ke route app.get('/contact')
   });
 });
 
