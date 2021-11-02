@@ -68,8 +68,6 @@ app.get("/transactions", async (req, res) => {
   });
   // ==================== ** ==================== //
 
-  // console.log(newHistory.length);
-
   // Proses Menghitung Total Herga Barang Yang Terjual Per Hari pada Collection Transaction
   const profitTransactions = await Transaction.aggregate([
     { $match: {} },
@@ -84,19 +82,15 @@ app.get("/transactions", async (req, res) => {
   ]);
 
   // Generate tanggal, bulan dan tahun saat ini
-  let d = new Date();
-  let date = d.getDate();
-  let month = d.getMonth() + 1;
-  let year = d.getFullYear();
-  let dateStr = `${date}/${month}/${year}`;
+  let date = new Date();
+  let fullDate = date.toISOString().split("T")[0];
 
   res.render("transactions", {
     title: "TRANSACTION | ALFAS Makassar",
     layout: "layouts/main-layout",
     transactions,
     profitTransactions,
-    date,
-    dateStr,
+    fullDate,
     msg: req.flash("msg"),
   });
 });
@@ -192,23 +186,10 @@ app.get("/history_transactions", async (req, res) => {
     { $sort: { _id: 1 } },
   ]);
 
-  // Generate jam saat ini
-  let today = new Date();
-  let time = today.getHours();
-
-  // Generate tanggal, bulan dan tahun saat ini
-  let d = new Date();
-  let date = d.getDate();
-  let month = d.getMonth() + 1;
-  let year = d.getFullYear();
-  let dateStr = `${year}-${month}-${date}`;
-
   res.render("history_transactions", {
     title: "HiSTORY TRANSACTION | ALFAS Makassar",
     layout: "layouts/main-layout",
     profitHistories,
-    time,
-    dateStr,
   });
 });
 
